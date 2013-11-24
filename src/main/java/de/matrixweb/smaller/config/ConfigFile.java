@@ -236,6 +236,9 @@ public class ConfigFile {
 
     private Tests tests;
 
+    @JsonProperty("inject-partials")
+    private boolean injectPartials;
+
     /**
      * @return the ip
      */
@@ -369,6 +372,21 @@ public class ConfigFile {
      */
     public void setTests(final Tests tests) {
       this.tests = tests;
+    }
+
+    /**
+     * @return the injectPartials
+     */
+    public boolean isInjectPartials() {
+      return this.injectPartials;
+    }
+
+    /**
+     * @param injectPartials
+     *          the injectPartials to set
+     */
+    public void setInjectPartials(final boolean injectPartials) {
+      this.injectPartials = injectPartials;
     }
 
     /** */
