@@ -1,0 +1,48 @@
+dev-server: 
+  ip: 0.0.0.0
+  port: 12345
+  proxyhost: localhost
+  proxyport: 3000
+  debug: true
+  process:
+    - "/app.js"
+    - "/style.css"
+  templates: handlebars
+  live-reload: true
+  tests:
+    framework: jasmine
+    folder: "./tests"
+files:
+  folder:
+    - "dir1"
+    - "dir2"
+  includes:
+    - "**/*.coffee"
+    - "**/*.less"
+  excludes:
+    - "**/*.bin"
+tasks:
+  coffeeScript:
+    src: 
+      - "**/*.coffee"
+    dest: "."
+    options:
+      source-maps: true
+      bare: true
+  browserify:
+    src: 
+      - "main.js"
+    dest: "app.js"
+    options:
+      aliases:
+        "./some-file": library
+  lessjs:
+    src: 
+      - "main.less"
+    dest: "style.css"
+processors:
+  js: 
+    - coffeeScript
+    - browserify
+  css: 
+    - lessjs
