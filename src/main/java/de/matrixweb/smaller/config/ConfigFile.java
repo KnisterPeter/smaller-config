@@ -234,6 +234,9 @@ public class ConfigFile {
     @JsonProperty("live-reload")
     private boolean liveReload;
 
+    @JsonProperty("force-full-reload")
+    private boolean forceFullReload;
+
     private Tests tests;
 
     @JsonProperty("inject-partials")
@@ -357,6 +360,21 @@ public class ConfigFile {
      */
     public void setLiveReload(final boolean liveReload) {
       this.liveReload = liveReload;
+    }
+
+    /**
+     * @return the forceFullReload
+     */
+    public boolean isForceFullReload() {
+      return this.forceFullReload;
+    }
+
+    /**
+     * @param forceFullReload
+     *          the forceFullReload to set
+     */
+    public void setForceFullReload(final boolean forceFullReload) {
+      this.forceFullReload = forceFullReload;
     }
 
     /**
