@@ -4,45 +4,50 @@ dev-server:
     proxyhost: localhost
     proxyport: 3000
     debug: true
-    process:
-        - "/app.js"
-        - "/style.css"
-    templates: handlebars
     live-reload: true
-    tests:
-        framework: jasmine
-        folder: "./tests"
-files:
-    folder:
-        - "dir1"
-        - "dir2"
-    includes:
-        - "**/*.coffee"
-        - "**/*.less"
-    excludes:
-        - "**/*.bin"
-tasks:
-    coffeeScript:
-        src: 
-            - "**/*.coffee"
-        dest: "."
-        options:
-            source-maps: true
-            bare: true
-    browserify:
-        src: 
-            - "main.js"
-        dest: "app.js"
-        options:
-            aliases:
-                "./some-file": library
-    lessjs:
-        src: 
-            - "main.less"
-        dest: "style.css"
-processors:
-    js: 
-        - coffeeScript
-        - browserify
-    css: 
-        - lessjs
+environments:
+    first:
+        process:
+            - "/app.js"
+            - "/style.css"
+        templates: handlebars
+        test-framework: jasmine
+        files:
+            folder:
+                - "dir1"
+                - "dir2"
+            includes:
+                - "**/*.coffee"
+                - "**/*.less"
+            excludes:
+                - "**/*.bin"
+        test-files:
+            folder:
+                - "./tests"
+            includes:
+            excludes:
+        processors:
+            coffeeScript:
+                src: 
+                    - "**/*.coffee"
+                dest: "."
+                options:
+                    source-maps: true
+                    bare: true
+            browserify:
+                src: 
+                    - "main.js"
+                dest: "app.js"
+                options:
+                    aliases:
+                        "./some-file": library
+            lessjs:
+                src: 
+                    - "main.less"
+                dest: "style.css"
+        pipeline:
+            js: 
+                - coffeeScript
+                - browserify
+            css: 
+                - lessjs
