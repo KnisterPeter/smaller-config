@@ -137,6 +137,9 @@ public class ConfigFile {
    * @return the devServer
    */
   public DevServer getDevServer() {
+    if (this.devServer == null) {
+      this.devServer = new DevServer();
+    }
     return this.devServer;
   }
 
@@ -152,6 +155,10 @@ public class ConfigFile {
    * @return the environments
    */
   public Map<String, Environment> getEnvironments() {
+    if (this.environments == null) {
+      this.environments = new HashMap<String, Environment>();
+      this.environments.put("first", new Environment());
+    }
     return this.environments;
   }
 

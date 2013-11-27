@@ -1,5 +1,6 @@
 package de.matrixweb.smaller.config;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
@@ -79,6 +80,9 @@ public class Environment {
    * @return the files
    */
   public Files getFiles() {
+    if (this.files == null) {
+      this.files = new Files();
+    }
     return this.files;
   }
 
@@ -94,6 +98,9 @@ public class Environment {
    * @return the testFiles
    */
   public Files getTestFiles() {
+    if (this.testFiles == null) {
+      this.testFiles = new Files();
+    }
     return this.testFiles;
   }
 
@@ -109,6 +116,9 @@ public class Environment {
    * @return the processors
    */
   public Map<String, Processor> getProcessors() {
+    if (this.processors == null) {
+      this.processors = new HashMap<String, Processor>();
+    }
     return this.processors;
   }
 
