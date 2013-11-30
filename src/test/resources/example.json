@@ -36,16 +36,14 @@
       },
       "processors":{
         "coffeeScript": {
-          "src": ["**/*.coffee"],
-          "dest": ".",
+          "src": "/main.coffee",
           "options": {
             "source-maps": true,
             "bare": true
           }
         },
         "browserify": {
-          "src": ["main.js"],
-          "dest": "app.js",
+          "dest": "/app.js",
           "options": {
             "aliases": {
               "./some-file": "library"
@@ -53,14 +51,11 @@
           }
         },
         "lessjs": {
-          "src": ["main.less"],
-          "dest": "style.css"
+          "src": "/main.less",
+          "dest": "/style.css"
         }
       },
-      "pipeline": {
-        "js": ["coffeeScript", "browserify"],
-        "css": ["lessjs"]
-      }
+      "pipeline": ["coffeeScript", "browserify", "lessjs"]
     }
   }
 }

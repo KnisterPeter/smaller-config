@@ -18,6 +18,9 @@ public class Files {
    * @return the folder
    */
   public String[] getFolder() {
+    if (this.folder == null) {
+      return new String[0];
+    }
     return this.folder;
   }
 

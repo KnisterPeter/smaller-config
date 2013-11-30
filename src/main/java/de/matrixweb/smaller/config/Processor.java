@@ -12,7 +12,7 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Processor {
 
-  private String[] src;
+  private String src;
 
   private String dest;
 
@@ -21,7 +21,7 @@ public class Processor {
   /**
    * @return the src
    */
-  public String[] getSrc() {
+  public String getSrc() {
     return this.src;
   }
 
@@ -29,7 +29,7 @@ public class Processor {
    * @param src
    *          the src to set
    */
-  public void setSrc(final String[] src) {
+  public void setSrc(final String src) {
     this.src = src;
   }
 

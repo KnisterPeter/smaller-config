@@ -28,8 +28,7 @@ public class Environment {
   @TypeHint(type = Processor.class)
   private Map<String, Processor> processors;
 
-  @TypeHint(type = String[].class)
-  private Map<String, String[]> pipeline;
+  private String[] pipeline;
 
   /**
    * @return the process
@@ -133,7 +132,7 @@ public class Environment {
   /**
    * @return the pipeline
    */
-  public Map<String, String[]> getPipeline() {
+  public String[] getPipeline() {
     return this.pipeline;
   }
 
@@ -141,7 +140,7 @@ public class Environment {
    * @param pipeline
    *          the pipeline to set
    */
-  public void setPipeline(final Map<String, String[]> pipeline) {
+  public void setPipeline(final String[] pipeline) {
     this.pipeline = pipeline;
   }
 

@@ -9,13 +9,13 @@ import org.codehaus.jackson.annotate.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DevServer {
 
-  private String ip;
+  private String ip = "0.0.0.0";
 
-  private int port;
+  private int port = 12345;
 
-  private String proxyhost;
+  private String proxyhost = "localhost";
 
-  private int proxyport;
+  private int proxyport = 80;
 
   private boolean debug;
 
