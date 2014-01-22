@@ -53,8 +53,10 @@ public class Processor {
    */
   public Map<String, Option> getOptions() {
     final Map<String, Option> map = new HashMap<String, Option>();
-    for (final Entry<String, Object> entry : this.options.entrySet()) {
-      map.put(entry.getKey(), new Option(entry.getValue()));
+    if (this.options != null) {
+      for (final Entry<String, Object> entry : this.options.entrySet()) {
+        map.put(entry.getKey(), new Option(entry.getValue()));
+      }
     }
     return map;
   }
