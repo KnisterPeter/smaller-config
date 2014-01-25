@@ -66,6 +66,9 @@ public class Processor {
    * @return Returns the plain objects
    */
   public Map<String, Object> getPlainOptions() {
+    if (this.options == null) {
+      this.options = new HashMap<String, Object>();
+    }
     return this.options;
   }
 
