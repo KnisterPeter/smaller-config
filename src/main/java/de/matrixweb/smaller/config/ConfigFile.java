@@ -15,7 +15,19 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.constructor.AbstractConstruct;
+import org.yaml.snakeyaml.constructor.Constructor;
+import org.yaml.snakeyaml.nodes.MappingNode;
+import org.yaml.snakeyaml.nodes.Node;
+import org.yaml.snakeyaml.nodes.ScalarNode;
+import org.yaml.snakeyaml.nodes.SequenceNode;
+import org.yaml.snakeyaml.nodes.Tag;
+import org.yaml.snakeyaml.representer.Represent;
+import org.yaml.snakeyaml.representer.Representer;
+
+import de.matrixweb.smaller.config.Processor.Option;
 
 /**
  * @author markusw
@@ -46,6 +58,27 @@ public class ConfigFile {
 
   @SuppressWarnings("unchecked")
   private static ConfigFile readYaml(final File file) throws IOException {
+    class OptionConstructor extends Constructor {
+      public OptionConstructor() {
+        this.yamlConstructors.put(new Tag("!option"), new ConstructOption());
+      }
+
+      class ConstructOption extends AbstractConstruct {
+        @Override
+        public Object construct(final Node node) {
+          switch (node.getNodeId()) {
+          case sequence:
+            return constructSequence((SequenceNode) node);
+          case mapping:
+            return constructMapping((MappingNode) node);
+          case scalar:
+            return constructScalar((ScalarNode) node);
+          default:
+            return OptionConstructor.super.constructObject(node);
+          }
+        }
+      }
+    }
     class Mapper {
       <T> T map(final Class<T> clazz, final Map<String, Object> map) {
         try {
@@ -126,11 +159,43 @@ public class ConfigFile {
 
     final FileReader reader = new FileReader(file);
     try {
-      return new Mapper().map(ConfigFile.class,
-          (Map<String, Object>) new Yaml().load(reader));
+      final Object object = new Yaml(new OptionConstructor()).load(reader);
+      if (object instanceof ConfigFile) {
+        return (ConfigFile) object;
+      }
+      return new Mapper().map(ConfigFile.class, (Map<String, Object>) object);
     } finally {
       reader.close();
     }
+  }
+
+  /**
+   * @return Returns this config file instance as yaml string
+   */
+  public String dumpYaml() {
+    class OptionRepresenter extends Representer {
+      private OptionRepresenter() {
+        this.representers.put(Option.class, new RepresentOption());
+      }
+
+      class RepresentOption implements Represent {
+        @Override
+        @SuppressWarnings("rawtypes")
+        public Node representData(final Object data) {
+          final Object value = ((Option) data).getValue();
+          if (value instanceof Iterable) {
+            return representSequence(new Tag("!option"), (Iterable) value, true);
+          } else if (value instanceof Map) {
+            return representMapping(new Tag("!option"), (Map) value, true);
+          } else if (value instanceof String) {
+            return representScalar(new Tag("!option"), (String) value);
+          }
+          return OptionRepresenter.super.representData(value);
+        }
+
+      }
+    }
+    return new Yaml(new OptionRepresenter(), new DumperOptions()).dump(this);
   }
 
   /**

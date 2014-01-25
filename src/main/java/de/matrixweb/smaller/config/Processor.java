@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 /**
@@ -62,6 +63,13 @@ public class Processor {
   }
 
   /**
+   * @return Returns the plain objects
+   */
+  public Map<String, Object> getPlainOptions() {
+    return this.options;
+  }
+
+  /**
    * @param options
    *          the options to set
    */
@@ -74,6 +82,45 @@ public class Processor {
 
     private Object value;
 
+    /**
+     * 
+     * @param value
+     */
+    public Option(final String value) {
+      this.value = value;
+    }
+
+    /**
+     * @param value
+     */
+    public Option(final Boolean value) {
+      this.value = value;
+    }
+
+    /**
+     * @param value
+     */
+    public Option(final Integer value) {
+      this.value = value;
+    }
+
+    /**
+     * @param value
+     */
+    public Option(final Double value) {
+      this.value = value;
+    }
+
+    /**
+     * @param value
+     */
+    public Option(final Map<String, Object> value) {
+      this.value = value;
+    }
+
+    /**
+     * @param value
+     */
     private Option(final Object value) {
       this.value = value;
     }
@@ -96,6 +143,7 @@ public class Processor {
     /**
      * @return The string
      */
+    @JsonIgnore
     public String getString() {
       return this.value != null ? this.value.toString() : null;
     }
@@ -103,6 +151,7 @@ public class Processor {
     /**
      * @return The boolean
      */
+    @JsonIgnore
     public Boolean getBoolean() {
       return this.value != null ? Boolean.valueOf(this.value.toString()) : null;
     }
@@ -110,6 +159,7 @@ public class Processor {
     /**
      * @return The integer
      */
+    @JsonIgnore
     public Integer getInteger() {
       return this.value != null ? Integer.valueOf(this.value.toString()) : null;
     }
@@ -117,6 +167,7 @@ public class Processor {
     /**
      * @return The double
      */
+    @JsonIgnore
     public Double getDouble() {
       return this.value != null ? Double.valueOf(this.value.toString()) : null;
     }
@@ -124,6 +175,7 @@ public class Processor {
     /**
      * @return The map
      */
+    @JsonIgnore
     @SuppressWarnings("unchecked")
     public Map<String, Object> getMap() {
       return (Map<String, Object>) this.value;
