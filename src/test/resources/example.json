@@ -1,4 +1,7 @@
 {
+  "build-server": {
+    "output-only": true
+  },
   "dev-server": {
     "ip": "0.0.0.0",
     "port": 12345,

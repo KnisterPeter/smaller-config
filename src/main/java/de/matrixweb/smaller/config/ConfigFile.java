@@ -35,6 +35,9 @@ import de.matrixweb.smaller.config.Processor.Option;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ConfigFile {
 
+  @JsonProperty("build-server")
+  private BuildServer buildServer;
+
   @JsonProperty("dev-server")
   private DevServer devServer;
 
@@ -196,6 +199,24 @@ public class ConfigFile {
       }
     }
     return new Yaml(new OptionRepresenter(), new DumperOptions()).dump(this);
+  }
+
+  /**
+   * @return the buildServer
+   */
+  public BuildServer getBuildServer() {
+    if (this.buildServer == null) {
+      this.buildServer = new BuildServer();
+    }
+    return this.buildServer;
+  }
+
+  /**
+   * @param buildServer
+   *          the buildServer to set
+   */
+  public void setBuildServer(final BuildServer buildServer) {
+    this.buildServer = buildServer;
   }
 
   /**

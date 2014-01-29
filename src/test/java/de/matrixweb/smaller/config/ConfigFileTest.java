@@ -35,6 +35,9 @@ public class ConfigFileTest {
   }
 
   private void configFileAssertions(final ConfigFile config) {
+    assertThat(config.getBuildServer(), is(not(nullValue())));
+    assertThat(config.getBuildServer().isOutputOnly(), is(true));
+
     assertThat(config.getDevServer(), is(not(nullValue())));
     assertThat(config.getDevServer().getIp(), is("0.0.0.0"));
     assertThat(config.getDevServer().getPort(), is(12345));
