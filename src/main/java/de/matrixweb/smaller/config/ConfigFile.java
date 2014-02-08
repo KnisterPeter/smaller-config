@@ -1,10 +1,11 @@
 package de.matrixweb.smaller.config;
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
+import java.net.URL;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,8 +25,7 @@ import org.yaml.snakeyaml.representer.Representer;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.matrixweb.smaller.config.Processor.Option;
@@ -51,17 +51,24 @@ public class ConfigFile {
    * @throws IOException
    */
   public static ConfigFile read(final File file) throws IOException {
+    return read(file.toURI().toURL());
+  }
+
+  /**
+   * @param url
+   * @return Returns the read {@link ConfigFile}
+   * @throws IOException
+   */
+  public static ConfigFile read(final URL url) throws IOException {
     try {
-      return new ObjectMapper().readValue(file, ConfigFile.class);
-    } catch (final JsonParseException e) {
-      return readYaml(file);
-    } catch (final JsonMappingException e) {
-      return readYaml(file);
+      return new ObjectMapper().readValue(url, ConfigFile.class);
+    } catch (final JsonProcessingException e) {
+      return readYaml(url);
     }
   }
 
   @SuppressWarnings("unchecked")
-  private static ConfigFile readYaml(final File file) throws IOException {
+  private static ConfigFile readYaml(final URL url) throws IOException {
     class OptionConstructor extends Constructor {
       public OptionConstructor() {
         this.yamlConstructors.put(new Tag("!option"), new ConstructOption());
@@ -161,15 +168,15 @@ public class ConfigFile {
 
     }
 
-    final FileReader reader = new FileReader(file);
+    final InputStream in = url.openStream();
     try {
-      final Object object = new Yaml(new OptionConstructor()).load(reader);
+      final Object object = new Yaml(new OptionConstructor()).load(in);
       if (object instanceof ConfigFile) {
         return (ConfigFile) object;
       }
       return new Mapper().map(ConfigFile.class, (Map<String, Object>) object);
     } finally {
-      reader.close();
+      in.close();
     }
   }
 
