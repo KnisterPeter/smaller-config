@@ -1,6 +1,6 @@
 package de.matrixweb.smaller.config;
 
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
  * @author markusw
