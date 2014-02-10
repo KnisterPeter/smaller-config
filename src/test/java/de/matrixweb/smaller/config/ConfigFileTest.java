@@ -2,6 +2,7 @@ package de.matrixweb.smaller.config;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 
 import org.junit.Test;
 
@@ -34,6 +35,7 @@ public class ConfigFileTest {
     configFileAssertions(config);
   }
 
+  @SuppressWarnings("unchecked")
   private void configFileAssertions(final ConfigFile config) {
     assertThat(config.getBuildServer(), is(not(nullValue())));
     assertThat(config.getBuildServer().isOutputOnly(), is(true));
@@ -66,10 +68,16 @@ public class ConfigFileTest {
             .getBoolean(), is(true));
     assertThat(env.getProcessors().get("coffeeScript").getOptions().get("bare")
         .getBoolean(), is(true));
-    assertThat(env.getProcessors().get("browserify").getOptions()
-        .get("aliases").getMap().containsKey("./some-file"), is(true));
-    assertThat(env.getProcessors().get("browserify").getOptions()
-        .get("aliases").getMap().get("./some-file").toString(), is("library"));
+
+    Map<String, Object> browserifyAliases = env.getProcessors()
+        .get("browserify").getOptions().get("aliases").getMap();
+    assertThat(browserifyAliases.containsKey("./some-file"), is(true));
+    assertThat(browserifyAliases.get("./some-file").toString(), is("library"));
+    browserifyAliases = (Map<String, Object>) env.getProcessors()
+        .get("browserify").getPlainOptions().get("aliases");
+    assertThat(browserifyAliases.containsKey("./some-file"), is(true));
+    assertThat(browserifyAliases.get("./some-file").toString(), is("library"));
+
     assertThat(env.getPipeline().length, is(3));
     assertThat(env.getPipeline()[0], is("coffeeScript"));
     assertThat(env.getPipeline()[1], is("browserify"));
