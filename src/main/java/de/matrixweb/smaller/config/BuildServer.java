@@ -10,7 +10,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class BuildServer {
 
   @JsonProperty("output-only")
-  boolean outputOnly = false;
+  private boolean outputOnly = false;
+
+  private String[] environments;
 
   /**
    * @return the outputOnly
@@ -25,6 +27,21 @@ public class BuildServer {
    */
   public void setOutputOnly(final boolean outputOnly) {
     this.outputOnly = outputOnly;
+  }
+
+  /**
+   * @return the environments
+   */
+  public String[] getEnvironments() {
+    return this.environments;
+  }
+
+  /**
+   * @param environments
+   *          the environments to set
+   */
+  public void setEnvironments(final String[] environments) {
+    this.environments = environments;
   }
 
 }

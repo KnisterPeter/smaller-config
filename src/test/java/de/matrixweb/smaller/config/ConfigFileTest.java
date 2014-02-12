@@ -39,6 +39,8 @@ public class ConfigFileTest {
   private void configFileAssertions(final ConfigFile config) {
     assertThat(config.getBuildServer(), is(not(nullValue())));
     assertThat(config.getBuildServer().isOutputOnly(), is(true));
+    assertThat(config.getBuildServer().getEnvironments().length, is(1));
+    assertThat(config.getBuildServer().getEnvironments()[0], is("second"));
 
     assertThat(config.getDevServer(), is(not(nullValue())));
     assertThat(config.getDevServer().getIp(), is("0.0.0.0"));
@@ -47,22 +49,21 @@ public class ConfigFileTest {
     assertThat(config.getDevServer().getProxyport(), is(3000));
     assertThat(config.getDevServer().isDebug(), is(true));
     assertThat(config.getDevServer().isLiveReload(), is(true));
+    assertThat(config.getDevServer().getEnvironments().length, is(1));
+    assertThat(config.getDevServer().getEnvironments()[0], is("first"));
 
     final Environment env = config.getEnvironments().get("first");
-    assertThat(env.getProcess()[0], is("/app.js"));
-    assertThat(env.getProcess()[1], is("/style.css"));
+    assertThat(env.getProcess(), is("/app.js"));
     assertThat(env.getTemplateEngine(), is("handlebars"));
     assertThat(env.getTestFramework(), is("jasmine"));
     assertThat(env.getFiles().getFolder()[0], is("dir1"));
     assertThat(env.getFiles().getFolder()[1], is("dir2"));
     assertThat(env.getFiles().getIncludes()[0], is("**/*.coffee"));
-    assertThat(env.getFiles().getIncludes()[1], is("**/*.less"));
     assertThat(env.getFiles().getExcludes()[0], is("**/*.bin"));
     assertThat(env.getTestFiles().getFolder()[0], is("./tests"));
-    assertThat(env.getProcessors().size(), is(3));
+    assertThat(env.getProcessors().size(), is(2));
     assertThat(env.getProcessors().get("coffeeScript").getSrc(),
         is("/main.coffee"));
-    assertThat(env.getProcessors().get("lessjs").getDest(), is("/style.css"));
     assertThat(
         env.getProcessors().get("coffeeScript").getOptions().get("source-maps")
             .getBoolean(), is(true));
@@ -78,9 +79,17 @@ public class ConfigFileTest {
     assertThat(browserifyAliases.containsKey("./some-file"), is(true));
     assertThat(browserifyAliases.get("./some-file").toString(), is("library"));
 
-    assertThat(env.getPipeline().length, is(3));
+    assertThat(env.getPipeline().length, is(2));
     assertThat(env.getPipeline()[0], is("coffeeScript"));
     assertThat(env.getPipeline()[1], is("browserify"));
-    assertThat(env.getPipeline()[2], is("lessjs"));
+
+    final Environment second = config.getEnvironments().get("second");
+    assertThat(second.getInherit(), is("first"));
+    assertThat(second.getFiles().getFolder().length, is(1));
+    assertThat(second.getFiles().getFolder()[0], is("."));
+    assertThat(second.getProcessors().size(), is(3));
+    assertThat(second.getProcessors().get("uglifyjs"), is(notNullValue()));
+    assertThat(second.getPipeline().length, is(3));
   }
+
 }

@@ -12,7 +12,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Environment {
 
-  private String[] process;
+  private ConfigFile configFile;
+
+  private String inherit;
+
+  private String process;
 
   @JsonProperty("templates")
   private String templateEngine;
@@ -31,9 +35,45 @@ public class Environment {
   private String[] pipeline;
 
   /**
+   * @return the configFile
+   */
+  public ConfigFile getConfigFile() {
+    return this.configFile;
+  }
+
+  /**
+   * @param configFile
+   *          the configFile to set
+   */
+  public void setConfigFile(final ConfigFile configFile) {
+    this.configFile = configFile;
+  }
+
+  /**
+   * @return the inherit
+   */
+  public String getInherit() {
+    return this.inherit;
+  }
+
+  /**
+   * @param inherit
+   *          the inherit to set
+   */
+  public void setInherit(final String inherit) {
+    this.inherit = inherit;
+  }
+
+  /**
    * @return the process
    */
-  public String[] getProcess() {
+  public String getProcess() {
+    if (this.process == null) {
+      final Environment env = getInherited();
+      if (env != null) {
+        return env.getProcess();
+      }
+    }
     return this.process;
   }
 
@@ -41,7 +81,7 @@ public class Environment {
    * @param process
    *          the process to set
    */
-  public void setProcess(final String[] process) {
+  public void setProcess(final String process) {
     this.process = process;
   }
 
@@ -49,6 +89,12 @@ public class Environment {
    * @return the templateEngine
    */
   public String getTemplateEngine() {
+    if (this.templateEngine == null) {
+      final Environment env = getInherited();
+      if (env != null) {
+        return env.getTemplateEngine();
+      }
+    }
     return this.templateEngine;
   }
 
@@ -64,6 +110,12 @@ public class Environment {
    * @return the testFramework
    */
   public String getTestFramework() {
+    if (this.testFramework == null) {
+      final Environment env = getInherited();
+      if (env != null) {
+        return env.getTestFramework();
+      }
+    }
     return this.testFramework;
   }
 
@@ -79,6 +131,12 @@ public class Environment {
    * @return the files
    */
   public Files getFiles() {
+    if (this.files == null) {
+      final Environment env = getInherited();
+      if (env != null) {
+        this.files = env.getFiles();
+      }
+    }
     if (this.files == null) {
       this.files = new Files();
     }
@@ -97,6 +155,12 @@ public class Environment {
    * @return the testFiles
    */
   public Files getTestFiles() {
+    if (this.testFiles == null) {
+      final Environment env = getInherited();
+      if (env != null) {
+        this.testFiles = env.getTestFiles();
+      }
+    }
     if (this.testFiles == null) {
       this.testFiles = new Files();
     }
@@ -118,6 +182,13 @@ public class Environment {
     if (this.processors == null) {
       this.processors = new HashMap<String, Processor>();
     }
+    final Environment env = getInherited();
+    if (env != null) {
+      final Map<String, Processor> inherited = env.getProcessors();
+      if (inherited != null) {
+        this.processors.putAll(inherited);
+      }
+    }
     return this.processors;
   }
 
@@ -133,6 +204,12 @@ public class Environment {
    * @return the pipeline
    */
   public String[] getPipeline() {
+    if (this.pipeline == null) {
+      final Environment env = getInherited();
+      if (env != null) {
+        return env.getPipeline();
+      }
+    }
     return this.pipeline;
   }
 
@@ -142,6 +219,13 @@ public class Environment {
    */
   public void setPipeline(final String[] pipeline) {
     this.pipeline = pipeline;
+  }
+
+  private Environment getInherited() {
+    if (this.inherit != null) {
+      return getConfigFile().getEnvironments().get(this.inherit);
+    }
+    return null;
   }
 
 }

@@ -1,6 +1,9 @@
 {
   "build-server": {
-    "output-only": true
+    "output-only": true,
+    "environments": [
+      "second"
+    ]
   },
   "dev-server": {
     "ip": "0.0.0.0",
@@ -8,11 +11,14 @@
     "proxyhost": "localhost",
     "proxyport": 3000,
     "debug": true,
-    "live-reload": true
+    "live-reload": true,
+    "environments": [
+      "first"
+    ]
   },
   "environments": {
     "first": {
-      "process": ["/app.js", "/style.css"],
+      "process": "/app.js",
       "templates": "handlebars",
       "test-framework": "jasmine",
       "files": {
@@ -21,8 +27,7 @@
           "dir2"
         ],
         "includes": [
-          "**/*.coffee",
-          "**/*.less"
+          "**/*.coffee"
         ],
         "excludes": [
           "**/*.bin"
@@ -52,13 +57,21 @@
               "./some-file": "library"
             }
           }
-        },
-        "lessjs": {
-          "src": "/main.less",
-          "dest": "/style.css"
         }
       },
-      "pipeline": ["coffeeScript", "browserify", "lessjs"]
+      "pipeline": ["coffeeScript", "browserify"]
+    },
+    "second": {
+      "inherit": "first",
+      "files": {
+        "folder": [
+          "."
+        ]
+      },
+      "processors":{
+        "uglifyjs": {}
+      },
+      "pipeline": ["coffeeScript", "browserify", "uglifyjs"]
     }
   }
 }

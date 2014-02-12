@@ -28,6 +28,8 @@ public class DevServer {
   @JsonProperty("inject-partials")
   private boolean injectPartials;
 
+  private String[] environments;
+
   /**
    * @return the ip
    */
@@ -146,6 +148,21 @@ public class DevServer {
    */
   public void setInjectPartials(final boolean injectPartials) {
     this.injectPartials = injectPartials;
+  }
+
+  /**
+   * @return the environments
+   */
+  public String[] getEnvironments() {
+    return this.environments;
+  }
+
+  /**
+   * @param environments
+   *          the environments to set
+   */
+  public void setEnvironments(final String[] environments) {
+    this.environments = environments;
   }
 
 }

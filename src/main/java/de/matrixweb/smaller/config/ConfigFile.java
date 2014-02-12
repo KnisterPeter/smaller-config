@@ -60,11 +60,16 @@ public class ConfigFile {
    * @throws IOException
    */
   public static ConfigFile read(final URL url) throws IOException {
+    ConfigFile configFile;
     try {
-      return new ObjectMapper().readValue(url, ConfigFile.class);
+      configFile = new ObjectMapper().readValue(url, ConfigFile.class);
     } catch (final JsonProcessingException e) {
-      return readYaml(url);
+      configFile = readYaml(url);
     }
+    for (final Environment env : configFile.getEnvironments().values()) {
+      env.setConfigFile(configFile);
+    }
+    return configFile;
   }
 
   @SuppressWarnings("unchecked")
