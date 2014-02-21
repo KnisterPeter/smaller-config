@@ -12,6 +12,18 @@
     "proxyport": 3000,
     "debug": true,
     "live-reload": true,
+    "static-files": {
+      "folder": [
+        "dir1",
+        "dir2"
+      ],
+      "includes": [
+        "**/*.coffee"
+      ],
+      "excludes": [
+        "**/*.bin"
+      ]
+    },
     "environments": [
       "first"
     ]

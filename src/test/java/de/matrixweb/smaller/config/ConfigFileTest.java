@@ -51,6 +51,14 @@ public class ConfigFileTest {
     assertThat(config.getDevServer().isLiveReload(), is(true));
     assertThat(config.getDevServer().getEnvironments().length, is(1));
     assertThat(config.getDevServer().getEnvironments()[0], is("first"));
+    assertThat(config.getDevServer().getStaticFiles().getFolder()[0],
+        is("dir1"));
+    assertThat(config.getDevServer().getStaticFiles().getFolder()[1],
+        is("dir2"));
+    assertThat(config.getDevServer().getStaticFiles().getIncludes()[0],
+        is("**/*.coffee"));
+    assertThat(config.getDevServer().getStaticFiles().getExcludes()[0],
+        is("**/*.bin"));
 
     final Environment env = config.getEnvironments().get("first");
     assertThat(env.getProcess(), is("/app.js"));

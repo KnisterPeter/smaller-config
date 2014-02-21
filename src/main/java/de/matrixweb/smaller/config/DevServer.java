@@ -28,6 +28,9 @@ public class DevServer {
   @JsonProperty("inject-partials")
   private boolean injectPartials;
 
+  @JsonProperty("static-files")
+  private Files staticFiles;
+
   private String[] environments;
 
   /**
@@ -148,6 +151,21 @@ public class DevServer {
    */
   public void setInjectPartials(final boolean injectPartials) {
     this.injectPartials = injectPartials;
+  }
+
+  /**
+   * @return the staticFiles
+   */
+  public Files getStaticFiles() {
+    return this.staticFiles;
+  }
+
+  /**
+   * @param staticFiles
+   *          the staticFiles to set
+   */
+  public void setStaticFiles(final Files staticFiles) {
+    this.staticFiles = staticFiles;
   }
 
   /**
